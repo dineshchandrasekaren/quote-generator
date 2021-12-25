@@ -10,24 +10,24 @@ let apiQuotes = [];
 
 // generating new random quotes
 function newQuote() {
-    loading();
+    showLoadingSpinner();
     const quote = apiQuotes[Math.floor(Math.random() * apiQuotes.length)];
     quote.text.length > 120
         ? quoteText.classList.add("long-quote")
         : quoteText.classList.remove("long-quote");
     quoteText.textContent = quote.text;
     author.textContent = !quote.author ? "Unknown" : quote.author;
-    complete();
+    hideLoadingSpinner();
 }
 
-// loader
-function loading() {
+
+function showLoadingSpinner() {
     loader.hidden = false;
     quoteContainer.hidden = true;
 }
 
-// loading completed
-function complete() {
+
+function hideLoadingSpinner() {
     loader.hidden = true;
     quoteContainer.hidden = false;
 }
@@ -38,12 +38,12 @@ getQuotes();
 // fetching the quotes from API
 async function getQuotes() {
     try {
-        loading();
+        showLoadingSpinner();
         const response = await fetch("https://type.fit/api/quotes");
         apiQuotes = await response.json();
         newQuote();
     } catch (error) {
-        alert(error);
+        new Error("Oops "+ error)
     }
 }
 
